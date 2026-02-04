@@ -9,6 +9,9 @@ from playwright.sync_api import sync_playwright
 
 
 def main() -> None:
+    repo_root = Path(__file__).resolve().parents[1]
+    python_path = os.environ.get("PYTHONPATH", "")
+    os.environ["PYTHONPATH"] = f"{repo_root}{os.pathsep}{python_path}".strip(os.pathsep)
     os.environ.setdefault("STREAMLIT_SERVER_HEADLESS", "true")
     os.environ.setdefault("STREAMLIT_SERVER_PORT", "8501")
 
