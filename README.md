@@ -45,6 +45,10 @@ allow_live: true
 streamlit run src/dashboard/app.py
 ```
 
+## GitHub Actions Dashboard Preview
+- The workflow `.github/workflows/dashboard-preview.yml` renders a static dashboard snapshot and publishes it to GitHub Pages.
+- Trigger on push to `work` or via **Actions > Dashboard Preview**.
+
 ## Controls
 - **Start/Stop**: create/remove `control/stop.flag`.
 - **Kill Switch**: create `control/kill_switch.flag`.
