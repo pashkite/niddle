@@ -1,0 +1,35 @@
+mode: paper  # paper | testnet | live (default paper)
+allow_live: false
+symbols:
+  - BTCUSDT
+  - ETHUSDT
+leverage: 3
+position_size_pct: 0.1
+max_symbol_exposure_pct: 0.2
+sl_pct: 0.01
+tp_pct: 0.02
+trailing_stop_pct: 0.0
+slippage_pct: 0.0005
+
+daily_loss_limit_pct: 0.05
+max_consecutive_losses: 3
+cooldown_minutes: 30
+
+poll_interval_seconds: 5
+
+initial_equity: 10000
+
+strategy:
+  name: ema_crossover
+  fast_period: 12
+  slow_period: 26
+
+logging:
+  level: INFO
+  dir: logs
+
+storage:
+  path: data/trading.db
+
+risk:
+  kill_switch_close_positions: false

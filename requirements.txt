@@ -1,0 +1,6 @@
+python-binance==1.0.19
+PyYAML==6.0.2
+streamlit==1.39.0
+pandas==2.2.3
+tenacity==9.0.0
+python-dotenv==1.0.1
