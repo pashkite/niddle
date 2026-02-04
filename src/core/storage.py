@@ -134,6 +134,14 @@ class Storage:
             )
             """
         )
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS engine_status (
+                id INTEGER PRIMARY KEY CHECK (id = 1),
+                timestamp TEXT
+            )
+            """
+        )
         self.conn.commit()
 
     @staticmethod
@@ -244,6 +252,21 @@ class Storage:
             "SELECT symbol, side, entry_price, quantity, leverage, mark_price, unrealized_pnl FROM positions"
         )
         return cursor.fetchall()
+
+    def record_heartbeat(self, timestamp: str) -> None:
+        self.conn.execute(
+            """
+            INSERT INTO engine_status (id, timestamp)
+            VALUES (1, ?)
+            ON CONFLICT(id) DO UPDATE SET timestamp=excluded.timestamp
+            """,
+            (timestamp,),
+        )
+        self.conn.commit()
+
+    def fetch_latest_heartbeat(self) -> Optional[sqlite3.Row]:
+        cursor = self.conn.execute("SELECT timestamp FROM engine_status WHERE id = 1")
+        return cursor.fetchone()
 
     def close(self) -> None:
         self.conn.close()

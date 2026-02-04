@@ -179,6 +179,7 @@ def run_engine(config_path: str) -> None:
                     )
 
         equity = portfolio.total_equity(prices)
+        heartbeat_timestamp = clock.now().isoformat()
         positions_snapshot = [
             {
                 "symbol": position.symbol,
@@ -193,13 +194,14 @@ def run_engine(config_path: str) -> None:
         ]
         storage.record_equity(
             EquityRecord(
-                timestamp=clock.now().isoformat(),
+                timestamp=heartbeat_timestamp,
                 equity=equity,
                 realized_pnl=portfolio.realized_pnl,
                 unrealized_pnl=portfolio.unrealized_pnl(prices),
             )
         )
-        storage.replace_positions(clock.now().isoformat(), positions_snapshot)
+        storage.replace_positions(heartbeat_timestamp, positions_snapshot)
+        storage.record_heartbeat(heartbeat_timestamp)
         time.sleep(config.poll_interval_seconds)
 
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -32,7 +32,14 @@ CONTROL_DIR.mkdir(parents=True, exist_ok=True)
 col1, col2, col3 = st.columns(3)
 
 mode = config.mode
-status = "STOPPED" if STOP_FILE.exists() else "RUNNING"
+heartbeat = storage.fetch_latest_heartbeat()
+is_fresh = False
+if heartbeat:
+    last_ts = datetime.fromisoformat(heartbeat["timestamp"])
+    is_fresh = datetime.now(timezone.utc) - last_ts < timedelta(seconds=config.poll_interval_seconds * 2)
+status = "STOPPED"
+if not STOP_FILE.exists() and is_fresh:
+    status = "RUNNING"
 last_updated = datetime.now(timezone.utc).isoformat()
 
 col1.metric("Mode", mode)
