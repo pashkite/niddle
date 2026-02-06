@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone, timedelta
 
 
@@ -17,7 +17,7 @@ class RiskState:
     consecutive_losses: int = 0
     last_loss_time: datetime | None = None
     daily_pnl: float = 0.0
-    day_start: datetime = datetime.now(timezone.utc)
+    day_start: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
     def reset_if_new_day(self) -> None:
         now = datetime.now(timezone.utc)
